@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c> 
+
+ RewriteEngine On
+
+ RewriteRule ^announce announce.php 
+ RewriteRule ^scrape   scrape.php  
+
+</IfModule>
