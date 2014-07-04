@@ -53,7 +53,7 @@
    
    if ( ! $res -> rowCount() )
    {
-        array_push( $response, [ 'failure reason' => 'No results were found.' ] );
+        $response[ 'failure reason' ] = 'No results were found.';
    }
-                     
+
    echo bencode( $response );
