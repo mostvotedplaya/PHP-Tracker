@@ -19,9 +19,9 @@
    
    /* Prepare Db */
    $pdo = dbconn( $config );
-   
+
    $sql = 'SELECT
-                 infohash, downloaded,
+                 infohash, downloaded, name,
                  
                  (SELECT COUNT(pid) FROM peers WHERE residual = 0 AND tid = torrents.tid) As complete,
                 
@@ -48,5 +48,12 @@
    {
        $files[ array_shift( $row ) ] = $row; 
    }
-  
-   echo bencode( [ 'files' => $files ] );
+   
+   $response = [ 'files' => $files, 'flags' => [ 'min_request_interval' => 3600 ] ];
+   
+   if ( ! $res -> rowCount() )
+   {
+        array_push( $response, [ 'failure reason' => 'No results were found.' ] );
+   }
+                     
+   echo bencode( $response );
