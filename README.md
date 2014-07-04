@@ -20,3 +20,25 @@ For users whom use apache i have supplied a .htaccess which will provide nice ur
 
 http://domain.tld/announce
 http://domain.tld/scrape
+
+<b>Scrape</b>
+
+Scraping supports the following dictionaries / keys.
+ 
+ + files
+   + infohash
+     - complete
+     - incomplete
+     - downloaded
+     - name
+ - failure reason
+ + flags
+     - min_request_interval
+    
+<b>Failure reason</b> 
+
+will be available if no results are found.
+
+<b>Flags</b> Supported by Azureus
+
+http://wiki.vuze.com/w/Scrape
