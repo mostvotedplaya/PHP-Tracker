@@ -48,8 +48,13 @@ http://wiki.vuze.com/w/Scrape
 Failure reasons:
 
  #1 - One or more fields were missing from the request.
+ 
  #2 - The info_hash was not the correct length.
+ 
  #3 - The peer_id was not the correct length.
+ 
  #4 - A invalid port was provided.
+ 
  #5 - The torrent is not registered at the tracker.
+ 
  #6 - The torrent is banned.
