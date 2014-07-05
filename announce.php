@@ -90,15 +90,29 @@
            WHERE
                  infohash = ' . $pdo -> quote( $info_hash );
                  
-   $torrent = $pdo -> query( $sql ) -> fetch( PDO::FETCH_ASSOC );
+   /* Unregistered Torrent */
+   if ( ! ( $torrent = $pdo -> query( $sql ) -> fetch( PDO::FETCH_ASSOC ) ) )
+   {
+        echo $error( 'Tracker error: #5' );
+       
+        exit;
+   }
 
+   /* Banned Torrent */
+   if ( $torrent[ 'banned' ] )
+   {
+        echo $error( 'Tracker error: #6' );
+       
+        exit;
+   }
+   
    /* Prepare Response */
-   $response = [];
+   $response = [ 'complete' => $torrent[ 'complete' ], 'incomplete' => $torrent[ 'incomplete' ], 'downloaded' => $torrent[ 'downloaded' ], 'interval' => 900, 'min interval' => 300 ];
  
-   switch ( @$event )
+   switch ( $event )
    {
        default: case 'started':
-       
+    
              break;
              
        case 'stopped':
@@ -106,8 +120,16 @@
              break;
              
        case 'completed':
-  
+      
              break;
    } 
    
+   /* Send Headers */
+   header( 'Cache-Control: no-cache, must-revalidate' );
+   
+   header( 'Expires: Fri, 30 Mar 1990 00:00:00 GMT' );
+                 
+   header( 'Pragma: no-cache' );
+   
+   /* Send Response */
    echo bencode( $response );
