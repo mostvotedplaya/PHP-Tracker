@@ -54,14 +54,16 @@
         exit;
    }
    
-   /* Invalid Port */
-   if ( ! $port Or $port > 0xffff )
+   /* Invalid Port ? */
+   $port = intval( $port );
+   
+   if ( ! isset( $_GET[ 'cryptoport' ] ) And ! $port Or $port > 0xffff )
    {
         echo $error( 'Tracker error: #4' );
        
         exit;
    }
-   
+
    /* Optional Vars */
    foreach ( [ 'compact', 'no_peer_id', 'event', 'ip', 'numwant', 'key', 'trackerid', 'supportcrypto', 'requirecrypto', 'cryptoport' ] As $opt )
    {
