@@ -20,7 +20,7 @@
             
             break;
        }
-       
+
        ${$var} = urldecode( $_GET[ $var ] );
    }
    
@@ -53,19 +53,22 @@
        
         exit;
    }
-   
+
    /* Invalid Port ? */
-   $port = intval( $port );
+   $port = isset( $_GET[ 'cryptoport' ] ) ? 0 + $_GET[ 'cryptoport' ] : 0 + $port;
    
-   if ( ! isset( $_GET[ 'cryptoport' ] ) And ! $port Or $port > 0xffff )
+   if ( ! $port Or $port > 0xffff )
    {
         echo $error( 'Tracker error: #4' );
        
         exit;
    }
-
+   
+   /* Remaining */
+   $residual = 0 + $left;
+   
    /* Optional Vars */
-   foreach ( [ 'compact', 'no_peer_id', 'event', 'ip', 'numwant', 'key', 'trackerid', 'supportcrypto', 'requirecrypto', 'cryptoport' ] As $opt )
+   foreach ( [ 'compact', 'no_peer_id', 'event', 'ip', 'numwant', 'key', 'supportcrypto', 'requirecrypto', 'cryptoport' ] As $opt )
    {
        if ( ! isset( $_GET[ $opt ] ) )
        {
@@ -107,31 +110,35 @@
        
         exit;
    }
-   
+
    /* Prepare Response */
    $response = [ 'complete' => $torrent[ 'complete' ], 'incomplete' => $torrent[ 'incomplete' ], 'downloaded' => $torrent[ 'downloaded' ], 'interval' => 900, 'min interval' => 300 ];
  
    switch ( $event )
    {
        default: case 'started':
-    
+  
              break;
              
        case 'stopped':
-   
+             
+              $pdo -> query( 'DELETE FROM peers WHERE tid = ' . $pdo -> quote( $torrent[ 'tid' ] ) . ' AND peerId = ' . $pdo -> quote( $peer_id ) );
+            
              break;
              
        case 'completed':
-      
+            
+              $pdo -> query( 'UPDATE torrents SET downloaded = downloaded + 1 WHERE tid = ' . $pdo -> quote( $torrent[ 'tid' ] ) );
+           
              break;
    } 
-   
+     
    /* Send Headers */
    header( 'Cache-Control: no-cache, must-revalidate' );
    
    header( 'Expires: Fri, 30 Mar 1990 00:00:00 GMT' );
                  
    header( 'Pragma: no-cache' );
-   
+
    /* Send Response */
    echo bencode( $response );
