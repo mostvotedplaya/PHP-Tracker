@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `torrents` (
   UNIQUE KEY `infohash` (`infohash`),
   KEY `banned` (`banned`),
   FULLTEXT KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 ALTER TABLE `peers`
