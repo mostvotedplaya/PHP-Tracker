@@ -10,8 +10,11 @@ This implementation will be heavily based on everything discussed in this link:
 https://wiki.theory.org/BitTorrentSpecification
 
 <b>Requirements</b>
+
 PHP 5.4 + with PDO
+
 MySQL
+
 Webserver 
 
 <b>Apache</b>
@@ -19,6 +22,7 @@ Webserver
 For users whom use apache i have supplied a .htaccess which will provide nice urls providing mod_rewrite is enabled, forexample:
 
 http://domain.tld/announce
+
 http://domain.tld/scrape
 
 <b>Scrape</b>
@@ -38,10 +42,6 @@ Scraping supports the following dictionaries / keys.
 <b>Failure reason</b> 
 
 will be available if no results are found.
-
-<b>Flags</b> Supported by Azureus
-
-http://wiki.vuze.com/w/Scrape
 
 <b>Announce</b>
 
