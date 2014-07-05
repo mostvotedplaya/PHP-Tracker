@@ -12,7 +12,7 @@
    /* Required Vars */
    $valid = true;
   
-   foreach ( [ 'info_hash', 'peer_id', 'port', 'uploaded', 'downloaded', 'left' ] As $var )
+   foreach ( [ 'info_hash', 'peer_id', 'port', 'uploaded', 'downloaded', 'left', 'key' ] As $var )
    {
        if ( ! isset( $_GET[ $var ] ) Or ! is_string( $_GET[ $var ] ) )
        {
@@ -63,12 +63,12 @@
        
         exit;
    }
-   
+  
    /* Remaining */
    $residual = 0 + $left;
    
    /* Optional Vars */
-   foreach ( [ 'compact', 'no_peer_id', 'event', 'ip', 'numwant', 'key', 'supportcrypto', 'requirecrypto', 'cryptoport' ] As $opt )
+   foreach ( [ 'compact', 'no_peer_id', 'event', 'ip', 'supportcrypto', 'requirecrypto', 'cryptoport' ] As $opt )
    {
        if ( ! isset( $_GET[ $opt ] ) )
        {
@@ -80,6 +80,12 @@
        ${$opt} = strval( $_GET[ $opt ] );
    }
    
+   /* Get User IP */
+   if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) )
+   {
+        $_SERVER[ 'REMOTE_ADDR' ] = $ip; 
+   }
+
    /* Prepare Db */
    $pdo = dbconn( $config );
    
@@ -88,7 +94,9 @@
                  
                  (SELECT COUNT(pid) FROM peers WHERE residual = 0 AND tid = torrents.tid) As complete,
                 
-                 (SELECT COUNT(pid) FROM peers WHERE residual > 0 AND tid = torrents.tid) As incomplete
+                 (SELECT COUNT(pid) FROM peers WHERE residual > 0 AND tid = torrents.tid) As incomplete,
+                 
+                 (SELECT pid FROM peers WHERE tid = torrents.tid AND uid = ' . $pdo -> quote( $key ) . ') As self
            FROM
                  torrents
                  
@@ -99,7 +107,7 @@
    if ( ! ( $torrent = $pdo -> query( $sql ) -> fetch( PDO::FETCH_ASSOC ) ) )
    {
         echo $error( 'Tracker error: #5' );
-       
+    
         exit;
    }
 
@@ -117,18 +125,29 @@
    switch ( $event )
    {
        default: case 'started':
-  
+         
              break;
              
        case 'stopped':
-             
-              $pdo -> query( 'DELETE FROM peers WHERE tid = ' . $pdo -> quote( $torrent[ 'tid' ] ) . ' AND peerId = ' . $pdo -> quote( $peer_id ) );
-            
+          
+             /* Remove Self */
+             if ( $torrent[ 'self' ] )
+             {
+                  $pdo -> query( 'DELETE FROM peers WHERE pid = ' . $pdo -> quote( $torrent[ 'self' ] ) );  
+             }
+        
              break;
              
        case 'completed':
             
-              $pdo -> query( 'UPDATE torrents SET downloaded = downloaded + 1 WHERE tid = ' . $pdo -> quote( $torrent[ 'tid' ] ) );
+             /* Update Self */
+             if ( $torrent[ 'self' ] )
+             {
+                  $pdo -> query( 'UPDATE peers SET residual = 0 WHERE pid = ' . $pdo -> quote( $torrent[ 'self' ] ) );
+             }
+           
+             /* Add Completion */
+             $pdo -> query( 'UPDATE torrents SET downloaded = downloaded + 1 WHERE tid = ' . $pdo -> quote( $torrent[ 'tid' ] ) );
            
              break;
    } 
