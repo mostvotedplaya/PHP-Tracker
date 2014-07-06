@@ -27,6 +27,11 @@ http://domain.tld/scrape
 
 <b>Scrape</b>
 
+If no info hash is specified then all available torrents in the database are returned providing they have not been
+set as banned.
+
+Multiple scrape requests are supported.
+
 Scraping supports the following dictionaries / keys.
  
  + files
