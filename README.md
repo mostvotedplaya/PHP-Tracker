@@ -1,4 +1,4 @@
-Bittorrent Tracker
+Bittorrent Tracker - (INCOMPLETE)
 =================
 
 This is my implementation of a Open torrent tracker in PHP, the reason for me creating this is because i strongly believe
@@ -63,3 +63,15 @@ Failure reasons:
  #5 - The torrent is not registered at the tracker.
  
  #6 - The torrent is banned.
+  
+<b>Installation</b>
+
+1.) Upload files inside upload folder to your webserver.
+
+2.) Create database.
+
+3.) Import SQL.
+
+4.) Update backend/config.php with your SQL settings.
+
+5.) Add cron.php to crontab (every 15 ~ 30 minutes).

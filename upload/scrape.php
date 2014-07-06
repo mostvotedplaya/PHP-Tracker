@@ -14,8 +14,8 @@
    
    if ( preg_match_all( '#info_hash=([^&]+)#', $_SERVER[ 'QUERY_STRING' ], $m ) )
    {
-        $infohash = array_map( 'urldecode', $m[ 1 ] ); 
-   }
+        $infohash = array_map( 'urldecode', $m[ 1 ] );         
+   }                                           
    
    /* Prepare Db */
    $pdo = dbconn( $config );
@@ -41,7 +41,7 @@
                  
    header( 'Pragma: no-cache' );
    
-   /* Send Response */
+   /* Send Response */                                 
    $files = [];
    
    foreach ( $res As $row )

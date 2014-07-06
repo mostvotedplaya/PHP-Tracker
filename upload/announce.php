@@ -129,26 +129,11 @@
              break;
              
        case 'stopped':
-          
-             /* Remove Self */
-             if ( $torrent[ 'self' ] )
-             {
-                  $pdo -> query( 'DELETE FROM peers WHERE pid = ' . $pdo -> quote( $torrent[ 'self' ] ) );  
-             }
-        
+         
              break;
              
        case 'completed':
-            
-             /* Update Self */
-             if ( $torrent[ 'self' ] )
-             {
-                  $pdo -> query( 'UPDATE peers SET residual = 0 WHERE pid = ' . $pdo -> quote( $torrent[ 'self' ] ) );
-             }
-           
-             /* Add Completion */
-             $pdo -> query( 'UPDATE torrents SET downloaded = downloaded + 1 WHERE tid = ' . $pdo -> quote( $torrent[ 'tid' ] ) );
-           
+        
              break;
    } 
      
