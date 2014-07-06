@@ -10,7 +10,8 @@
    include( 'config.php' );
 
    /**
-   * put your comment there...
+   * Attempt to establish database connection, the
+   * script will exit upon failure.
    * 
    * @param stdClass $config
    * @return PDO
@@ -35,7 +36,7 @@
        
        }
       
-       return null;
+       exit( 'Failed to establish db connection.' );
    }
 
    /**
@@ -130,7 +131,7 @@
        
        foreach ( $arr As $key => $val )
        {
-           $dict .= bencode( $key );
+           $dict .= bencStr( $key );
            
            $dict .= bencode( $val );
        }
