@@ -40,6 +40,8 @@
    header( 'Expires: Fri, 30 Mar 1990 00:00:00 GMT' );
                  
    header( 'Pragma: no-cache' );
+   
+   header( 'Content-Type: text/plain' );
               
    /* Send Response */   
    $response[ 'flags' ][ 'min_request_interval' ] = 3600;

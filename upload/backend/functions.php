@@ -46,9 +46,9 @@
    * @return mixed
    */
    function bencode( $var )
-   {
+   {                                  
        $varType = getType( $var );
-       
+                   
        switch ( $varType )
        {
            case 'string':
@@ -71,7 +71,7 @@
        }
        
        return null;
-   }
+   }                    
    
    /**
    * Bencode strings

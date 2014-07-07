@@ -55,7 +55,7 @@
    }
 
    /* Invalid Port ? */
-   $port = isset( $_GET[ 'cryptoport' ] ) ? 0 + $_GET[ 'cryptoport' ] : 0 + $port;
+   $port = isset( $_GET[ 'cryptoport' ] ) ? ( int ) $_GET[ 'cryptoport' ] : ( int ) $port;
    
    if ( ! $port Or $port > 0xffff )
    {
@@ -120,7 +120,7 @@
    }
 
    /* Prepare Response */
-   $response = [ 'complete' => ( int ) $torrent[ 'complete' ], 'incomplete' => ( int ) $torrent[ 'incomplete' ], 'downloaded' => ( int ) $torrent[ 'downloaded' ], 'interval' => $config -> maxInterval, 'min interval' => $config -> minInterval ];
+   $response = [ 'complete' => ( int ) $torrent[ 'complete' ], 'incomplete' => ( int ) $torrent[ 'incomplete' ], 'downloaded' => ( int ) $torrent[ 'downloaded' ], 'interval' => ( int ) $config -> maxInterval, 'min interval' => ( int ) $config -> minInterval ];
  
    /* Handle Events */
    switch ( $event )
@@ -128,11 +128,11 @@
        default: case 'started':
    
              $response[ 'peers' ] = array( false );
-   
+    
              break;
              
        case 'stopped':
-     
+       
              break;
              
        case 'completed':
