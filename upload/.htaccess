@@ -6,3 +6,6 @@
  RewriteRule ^scrape   scrape.php  
 
 </IfModule>
+
+SetEnvIfNoCase User-Agent "^Mozilla|^Opera|^Links|^Lynx" WebBrowser
+Deny from env=WebBrowser
