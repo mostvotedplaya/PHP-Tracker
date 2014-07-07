@@ -66,18 +66,18 @@
   
    /* Remaining */
    $residual = 0 + $left;
-   
+
    /* Optional Vars */
-   foreach ( [ 'compact', 'no_peer_id', 'event', 'ip', 'supportcrypto', 'requirecrypto', 'cryptoport' ] As $opt )
+   foreach ( [ 'compact', 'no_peer_id', 'event', 'ip', 'supportcrypto', 'requirecrypto', 'cryptoport' ] As $var )
    {
-       if ( ! isset( $_GET[ $opt ] ) )
+       if ( ! isset( $_GET[ $var ] ) )
        {
-            ${$opt} = null;
+            ${$var} = null;
            
             continue;
        }
        
-       ${$opt} = strval( $_GET[ $opt ] );
+       ${$var} = strval( $_GET[ $var ] );
    }
    
    /* Get User IP */
@@ -102,7 +102,7 @@
                  
            WHERE
                  infohash = ' . $pdo -> quote( $info_hash );
-                 
+
    /* Unregistered Torrent */
    if ( ! ( $torrent = $pdo -> query( $sql ) -> fetch( PDO::FETCH_ASSOC ) ) )
    {
@@ -120,29 +120,34 @@
    }
 
    /* Prepare Response */
-   $response = [ 'complete' => $torrent[ 'complete' ], 'incomplete' => $torrent[ 'incomplete' ], 'downloaded' => $torrent[ 'downloaded' ], 'interval' => 900, 'min interval' => 300 ];
+   $response = [ 'complete' => ( int ) $torrent[ 'complete' ], 'incomplete' => ( int ) $torrent[ 'incomplete' ], 'downloaded' => ( int ) $torrent[ 'downloaded' ], 'interval' => $config -> maxInterval, 'min interval' => $config -> minInterval ];
  
+   /* Handle Events */
    switch ( $event )
    {
        default: case 'started':
-         
+   
+             $response[ 'peers' ] = array( false );
+   
              break;
              
        case 'stopped':
-         
+     
              break;
              
        case 'completed':
-        
+           
              break;
    } 
-     
+
    /* Send Headers */
    header( 'Cache-Control: no-cache, must-revalidate' );
    
    header( 'Expires: Fri, 30 Mar 1990 00:00:00 GMT' );
                  
    header( 'Pragma: no-cache' );
+   
+   header( 'Content-Type: text/plain' );
 
    /* Send Response */
    echo bencode( $response );

@@ -40,20 +40,26 @@
    header( 'Expires: Fri, 30 Mar 1990 00:00:00 GMT' );
                  
    header( 'Pragma: no-cache' );
+              
+   /* Send Response */   
+   $response[ 'flags' ][ 'min_request_interval' ] = 3600;
    
-   /* Send Response */                                 
-   $files = [];
-   
+   $response[ 'files' ] = [];
+                  
    foreach ( $res As $row )
    {
-       $files[ array_shift( $row ) ] = $row; 
+       $response[ 'files' ][ $row[ 'infohash' ] ] = [ 'complete'   => ( int ) $row[ 'complete' ], 
+       
+                                                      'incomplete' => ( int ) $row[ 'incomplete' ],
+          
+                                                      'downloaded' => ( int ) $row[ 'downloaded' ], 
+                                        
+                                                      'name' => $row[ 'name' ] ];
    }
-   
-   $response = [ 'files' => $files, 'flags' => [ 'min_request_interval' => 3600 ] ];
-   
-   if ( ! $res -> rowCount() )
+
+   if ( ! $response[ 'files' ] )
    {
         $response[ 'failure reason' ] = 'No results were found.';
    }
-
+   
    echo bencode( $response );

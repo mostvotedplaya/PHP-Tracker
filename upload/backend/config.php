@@ -13,5 +13,10 @@
        
       'dbUser' => 'root',
        
-      'dbPass' => ''
+      'dbPass' => '',
+      
+      /* Tracker Settings */
+      'minInterval' => 300,
+      
+      'maxInterval' => 900
    );
