@@ -75,3 +75,15 @@ Failure reasons:
 4.) Update backend/config.php with your SQL settings.
 
 5.) Add cron.php to crontab (every 15 ~ 30 minutes).
+
+<b>Config Options</b>
+
+
+<b>minInterval</b>
+
+The minimum amount of time the client should wait before checking in with the tracker, if the client supports
+force update then this value is used.
+
+<b>maxInterval</b>
+
+The maximum amount of time the client should wait before checking in with the tracker.
