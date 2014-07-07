@@ -118,6 +118,18 @@
        
         exit;
    }
+   
+   /*
+      Lee Howarth: No, no no TorrentialStorm! Now we do the event updates!
+      
+      Our Father, 
+      
+      who art in Bittorrent, TorrentialStorm be thy name. 
+      
+      Thy kingdom come, invalid markup undone, on Earth as it was in hell. 
+      
+      With Liberty and Justice for TorrentTrader and Bittorrent. Amen.
+   */
 
    /* Prepare Response */
    $response = [ 'complete' => ( int ) $torrent[ 'complete' ], 'incomplete' => ( int ) $torrent[ 'incomplete' ], 'downloaded' => ( int ) $torrent[ 'downloaded' ], 'interval' => ( int ) $config -> maxInterval, 'min interval' => ( int ) $config -> minInterval ];
