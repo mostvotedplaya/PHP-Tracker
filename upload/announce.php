@@ -121,22 +121,51 @@
 
    /* Prepare Response */
    $response = [ 'complete' => ( int ) $torrent[ 'complete' ], 'incomplete' => ( int ) $torrent[ 'incomplete' ], 'downloaded' => ( int ) $torrent[ 'downloaded' ], 'interval' => ( int ) $config -> maxInterval, 'min interval' => ( int ) $config -> minInterval ];
- 
+
    /* Handle Events */
    switch ( $event )
    {
        default: case 'started':
-   
+
+             $peer = $pdo -> prepare( 'INSERT INTO peers (tid, uid, peerId, ip, port, residual) VALUES (:tid, :uid, :pid, :uip, :port, :left) ON DUPLICATE KEY UPDATE updated = NULL, peerId = :pid, ip = :uip, port = :port, residual = :left' );
+             
+             $peer -> execute
+             ( [
+                 ':tid'  => $torrent[ 'tid' ],
+                  
+                 ':uid'  => $key,
+                
+                 ':pid'  => $peer_id,
+                
+                 ':uip'  => $_SERVER[ 'REMOTE_ADDR' ],
+                
+                 ':port' => $port,
+                 
+                 ':left' => $residual
+             ] );
+         
              $response[ 'peers' ] = array( false );
-    
+ 
              break;
              
        case 'stopped':
-       
+         
+             if ( $torrent[ 'self' ] )
+             {
+                  $pdo -> query( 'DELETE FROM peers WHERE pid = ' . $pdo -> quote( $torrent[ 'self' ] ) );
+             }
+         
              break;
              
        case 'completed':
-           
+       
+             if ( $torrent[ 'self' ] )
+             {
+                  $pdo -> query( 'UPDATE peers SET residual = 0 WHERE pid = ' . $pdo -> quote( $torrent[ 'self' ] ) );
+                  
+                  $pdo -> query( 'UPDATE torrents SET downloaded = downloaded + 1 WHERE tid = ' . $pdo -> quote( $torrent[ 'tid' ] ) );
+             }
+      
              break;
    } 
 
@@ -146,8 +175,8 @@
    header( 'Expires: Fri, 30 Mar 1990 00:00:00 GMT' );
                  
    header( 'Pragma: no-cache' );
-   
-   header( 'Content-Type: text/plain' );
 
+   header( 'Content-Type: text/plain' );
+   
    /* Send Response */
    echo bencode( $response );
