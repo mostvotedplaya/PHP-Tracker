@@ -1,4 +1,4 @@
-Bittorrent Tracker - (INCOMPLETE)
+OBT Tracker - (INCOMPLETE)
 =================
 
 This is my implementation of a Open torrent tracker in PHP, the reason for me creating this is because i strongly believe
