@@ -108,3 +108,6 @@ force update then this value is used.
 <b>maxInterval</b>
 
 The maximum amount of time the client should wait before checking in with the tracker.
+
+
+[![PayPayl donate button](http://img.shields.io/paypal/donate.png?color=yellow)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QB8GQPZAH84N6 "Donate once-off to this project using Paypal")
