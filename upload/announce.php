@@ -139,24 +139,31 @@
    {
        default: case 'started':
 
-             $peer = $pdo -> prepare( 'INSERT INTO peers (tid, uid, peerId, ip, port, residual) VALUES (:tid, :uid, :pid, :uip, :port, :left) ON DUPLICATE KEY UPDATE updated = NULL, peerId = :pid, ip = :uip, port = :port, residual = :left' );
+             $peer = $pdo -> prepare( 'INSERT INTO peers (tid, uid, peerId, ip, port, residual, crypt) VALUES (:tid, :uid, :pid, :uip, :port, :left, :crypt) ON DUPLICATE KEY UPDATE updated = NULL, peerId = :pid, ip = :uip, port = :port, residual = :left, crypt = :crypt' );
              
              $peer -> execute
              ( [
-                 ':tid'  => $torrent[ 'tid' ],
+                 ':tid'   => $torrent[ 'tid' ],
                   
-                 ':uid'  => $key,
+                 ':uid'   => $key,
                 
-                 ':pid'  => $peer_id,
+                 ':pid'   => $peer_id,
                 
-                 ':uip'  => $_SERVER[ 'REMOTE_ADDR' ],
+                 ':uip'   => $_SERVER[ 'REMOTE_ADDR' ],
                 
-                 ':port' => $port,
+                 ':port'  => $port,
                  
-                 ':left' => $residual
+                 ':left'  => $residual,
+                 
+                 ':crypt' => $requirecrypto
              ] );
          
              $response[ 'peers' ] = array( false );
+ 
+             if ( $supportcrypto Or $requirecrypto )
+             {
+                  $response[ 'crypto_flags' ] = '';
+             }
  
              break;
              
