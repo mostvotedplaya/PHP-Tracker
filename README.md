@@ -16,7 +16,7 @@ https://wiki.theory.org/BitTorrentSpecification
 
 PHP 5.4 + with PDO
 
-MySQL
+MySQL >= 5.6
 
 Webserver 
 
