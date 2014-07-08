@@ -35,7 +35,7 @@ This folder is here for the sole purpose of testing.
        $pdo -> query( 'INSERT INTO `torrents` (`infohash`, `name`) VALUES (' . $pdo -> quote( $hash ) . ', ' . $pdo -> quote( $name ) . ')' );
 ```
    
-    After you've created the import.php file temporarily change the .htaccess filename to .htaccess.txt, then run the import script and rename
+After you've created the import.php file temporarily change the .htaccess filename to .htaccess.txt, then run the import script and rename
     the .htaccess.txt back to .htaccess
     
 4.) Load your sample.torrent to your client and select the sample.txt location and if everything went ok you should be registered as a seeder.
