@@ -76,6 +76,27 @@ Failure reasons:
 
 5.) Add cron.php to crontab (every 15 ~ 30 minutes).
 
+<b>Cron</b>
+
+The file called cron is used to keep the database tables tidy by removing any peers whom haven't checked
+in within a certain time, an example of when this may happen is if someones computer shuts down uncleanly
+which may not register the stopped event to the tracker.
+
+The default time for this is minInterval + maxInterval by default 20 minutes.
+
+The cron also will delete torrents which haven't been updated within a week.
+
+If you are going to leave this file in the document root then i suggest you secure the file with perhaps
+
+```
+if ( isset( $_SERVER[ 'REMOTE_ADDR' ] ) )
+{
+     exit;
+}
+```
+
+As the users remote addr will not be available if running the script via crontab.
+
 <b>Config Options</b>
 
 
