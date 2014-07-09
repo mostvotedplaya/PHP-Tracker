@@ -55,7 +55,7 @@
            
                  return bencStr( $var );
                  
-           case 'integer':
+           case 'double': case 'integer':
            
                  return bencInt( $var );
                  
