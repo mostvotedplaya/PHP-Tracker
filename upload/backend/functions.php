@@ -8,15 +8,17 @@
    
    /* Load Config */
    include( 'config.php' );
-
+   
    /**
-   * Attempt to establish database connection, the
-   * script will exit upon failure.
+   * Attempt to establish a database connection
    * 
-   * @param stdClass $config
-   * @return PDO
+   * @param 
+   *        stdclass $config
+   * 
+   * @return 
+   *        PDO object or null on failure
    */
-   function dbconn( stdClass $config )
+   function dbconn( stdclass $config )
    {
        try
        {
@@ -26,58 +28,81 @@
               
               $config -> dbUser,
               
-              $config -> dbPass 
+              $config -> dbPass
            );
-           
+  
            return $pdo;
        }
        catch ( PDOException $e )
        {
-       
+           
        }
-      
-       exit( 'Failed to establish db connection.' );
+ 
+       return null;
    }
-
+   
    /**
-   * Multipurpose bencode
+   * Multipurpose Bencode
    * 
-   * @param  mixed $var
-   * @return mixed
+   * This function maps variable types to child functions to
+   * build a bencoded string.
+   * 
+   * If an integer is greater than PHP_INT_MAX then PHP will
+   * automatically change the var to be a float and this
+   * will be recongized by getType as a double.
+   * 
+   * Sometimes integers will be formatted as a string, ensure
+   * you take necessary measures to change this or you may
+   * end up having the integer encoded as a string.
+   * 
+   * @param
+   *       string|integer|float|array: $var
+   * 
+   * @return
+   *       string|null
    */
    function bencode( $var )
-   {                                  
+   {
        $varType = getType( $var );
-                   
+       
        switch ( $varType )
        {
            case 'string':
            
                  return bencStr( $var );
-                 
-           case 'double': case 'integer':
+
+           case 'double': 
            
+           case 'integer':
+            
                  return bencInt( $var );
                  
            case 'array':
-                 
+           
                  $key = key( $var );
-                 
+           
                  return is_int( $key )
-                   
-               ? bencList( $var )
-                       
-               : bencDict( $var );
+                
+              ?  bencList( $var )
+              
+              :  bencDict( $var );
+                 
+           default:
+            
+                 break;
        }
        
        return null;
-   }                    
+   }
    
    /**
-   * Bencode strings
+   * Bencode string
    * 
-   * @param  string $str
-   * @return string
+   * @param
+   *       string: $str
+   * 
+   * @return
+   *       string
    */
    function bencStr( $str )
    {
@@ -85,21 +110,27 @@
    }
    
    /**
-   * Bencode integers
+   * Bencode integer
    * 
-   * @param  integer $int
-   * @return string
+   * @param
+   *       integer|float: $int
+   * 
+   * @return
+   *       string 
    */
    function bencInt( $int )
    {
-       return 'i' . $int . 'e';
+       return 'i' . round( $int ) . 'e';
    }
    
    /**
    * Bencode list
    * 
-   * @param  array $list
-   * @return string
+   * @param 
+   *       array: $arr An numeric array
+   * 
+   * @return 
+   *       string 
    */
    function bencList( array $arr )
    {
@@ -107,9 +138,9 @@
        
        $list = 'l';
        
-       foreach ( $arr As $var )
+       foreach ( $arr As $val )
        {
-           $list .= bencode( $var );
+           $list .= bencode( $val );
        }
        
        $list .= 'e';
@@ -120,8 +151,11 @@
    /**
    * Bencode dictionary
    * 
-   * @param  array $dict
-   * @return string
+   * @param 
+   *       array: $arr An associative array
+   * 
+   * @return
+   *       string
    */
    function bencDict( array $arr )
    {
