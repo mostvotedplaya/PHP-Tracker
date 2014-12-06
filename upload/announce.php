@@ -70,14 +70,14 @@
    /* Optional Vars */
    foreach ( [ 'compact', 'no_peer_id', 'event', 'ip', 'supportcrypto', 'requirecrypto', 'cryptoport' ] As $var )
    {
-       if ( ! isset( $_GET[ $var ] ) )
+       if ( ! isset( $_GET[ $var ] ) Or ! is_string( $_GET[ $var ] ) )
        {
             ${$var} = null;
            
             continue;
        }
        
-       ${$var} = strval( $_GET[ $var ] );
+       ${$var} = $_GET[ $var ];
    }
    
    /* Get User IP */
@@ -119,18 +119,6 @@
         exit;
    }
    
-   /*
-      Lee Howarth: No, no no TorrentialStorm! Now we do the event updates!
-      
-      Our Father, 
-      
-      who art in Bittorrent, TorrentialStorm be thy name. 
-      
-      Thy kingdom come, invalid markup undone, on Earth as it was in hell. 
-      
-      With Liberty and Justice for TorrentTrader and Bittorrent. Amen.
-   */
-
    /* Prepare Response */
    $response = [ 'complete' => ( int ) $torrent[ 'complete' ], 'incomplete' => ( int ) $torrent[ 'incomplete' ], 'downloaded' => ( int ) $torrent[ 'downloaded' ], 'interval' => ( int ) $config -> maxInterval, 'min interval' => ( int ) $config -> minInterval ];
 
