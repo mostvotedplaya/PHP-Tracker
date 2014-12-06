@@ -21,7 +21,7 @@
             break;
        }
 
-       ${$var} = urldecode( $_GET[ $var ] );
+       ${$var} = $_GET[ $var ];
    }
    
    /* Error Helper */
