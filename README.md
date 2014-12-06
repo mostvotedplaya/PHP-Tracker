@@ -1,7 +1,7 @@
 PHP BT Tracker - (INCOMPLETE)
 =================
 
-[![PayPayl donate button](http://img.shields.io/paypal/donate.png?color=yellow)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=bethanyhowarth@hotmail.com "Donate once-off to this project using Paypal")
+[![PayPayl donate button](http://img.shields.io/paypal/donate.png?color=yellow)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=lee@sucuri.net "Donate once-off to this project using Paypal")
 
 
 This is my implementation of a Open torrent tracker in PHP, the reason for me creating this is because i strongly believe
